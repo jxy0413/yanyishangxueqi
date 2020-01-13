@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjfu.igarden.dao.DiseaseclassifyresultMapper">
+    <insert id="addDiseaseClassifyResult" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO imgclassifyresult (shibieid,score,bname,baike_url,image_url,description)
+        VALUES (#{shibieid},#{score},#{bname},#{baike_url},#{image_url},#{description})
+    </insert>
+</mapper>

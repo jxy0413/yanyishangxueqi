@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjfu.igarden.dao.QuestionMapper">
+    <select id="findQuestionById" resultType="cn.edu.bjfu.igarden.entity.Question">
+        SELECT * FROM question
+        <where>
+            <!-- 重复说一下，id 不能是 int，int 默认是 0，不可能是 null, 而 Integer 可以是 null-->
+            <if test="id!=null">
+                id=#{id}
+            </if>
+        </where>
+    </select>
+    <select id="findAll" resultType="cn.edu.bjfu.igarden.entity.Question">
+        SELECT * FROM question
+    </select>
+    <select id="findQuestionByUserId" resultType="cn.edu.bjfu.igarden.entity.Question">
+        SELECT * FROM question
+        <where>
+            <if test="userid!=null">
+                userid=#{userid}
+            </if>
+            AND
+            <if test="qtype!=null">
+                qtype=#{qtype}
+            </if>
+        </where>
+        ORDER BY createtime DESC
+    </select>
+
+
+    <select id="findQuestionListByStatus" resultType="cn.edu.bjfu.igarden.entity.Question">
+        SELECT * FROM question
+        <where>
+            <if test="status!=null">
+                status=#{status}
+            </if>
+            AND
+            <if test="qtype!=null">
+                qtype=#{qtype}
+            </if>
+        </where>
+        ORDER BY createtime DESC
+    </select>
+    <select id="findQuestionListByAcceptStatus" resultType="cn.edu.bjfu.igarden.entity.Question">
+        SELECT * FROM question
+        <where>
+            <if test="status!=null">
+                accept_status=#{accept_status}
+            </if>
+            AND
+            <if test="qtype!=null">
+                qtype=#{qtype}
+            </if>
+        </where>
+        ORDER BY createtime DESC
+    </select>
+    <select id="findHotQuestionByHitsAndQtype" resultType="cn.edu.bjfu.igarden.entity.Question">
+        SELECT * FROM question
+        <where>
+            <if test="qtype!=null">
+                qtype = #{qtype}
+            </if>
+        </where>
+        ORDER BY hits DESC
+    </select>
+    <select id="findQuestionByDeleteTime" resultType="cn.edu.bjfu.igarden.entity.Question">
+        SELECT * FROM question
+        <where>
+            <if test="deletetime!=null">
+                deletetime= #{deletetime}
+            </if>
+        </where>
+    </select>
+    <select id="findQuestionStatusById" resultType="cn.edu.bjfu.igarden.entity.Question">
+        SELECT * FROM question
+        <where>
+            <if test="id!=null">
+                id= #{id}
+            </if>
+        </where>
+    </select>
+    <insert id="addQuestion"  useGeneratedKeys="true" keyProperty="id" >
+        insert into question(title,content,invite,image,qtype,userid,plant_type,plant_name,questioner_username,questioner_name,questioner_avatar,place)
+        values (#{title},#{content},#{invite},#{image},#{qtype},#{userid},#{plant_type},#{plant_name},#{questioner_username},#{questioner_name},#{questioner_avatar},#{place})
+    </insert>
+    <insert id="addPlantQuestion"  useGeneratedKeys="true" keyProperty="id" >
+        insert into question(title,content,invite,image,qtype,answertype,userid,questioner_username,questioner_name,questioner_avatar)
+        values (#{title},#{content},#{invite},#{image},#{qtype},#{answertype},#{userid},#{questioner_username},#{questioner_name},#{questioner_avatar})
+    </insert>
+    <update id="updateQuestionUniquekey"  useGeneratedKeys="true" keyProperty="id" >
+        update question
+        <set>
+            <if test="question_uniquekey!= null" >
+                question_uniquekey = #{question_uniquekey},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <!--<insert id="addPlantQuestion"  useGeneratedKeys="true" keyProperty="id" >-->
+        <!--insert into question(title,content,image,qtype,answertype)-->
+        <!--values (#{title},#{content},#{image},#{qtype},#{answertype})-->
+    <!--</insert>-->
+    <update id="changeQuestionStatus"  parameterType="cn.edu.bjfu.igarden.entity.Question" >
+        update question
+        <set>
+            status = #{status}
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="adoptQuestion"  parameterType="cn.edu.bjfu.igarden.entity.Question" >
+        update question
+        <set>
+            <if test="status!= null" >
+                accept_status = #{accept_status},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <update id="QuestionHits"  parameterType="cn.edu.bjfu.igarden.entity.Question" >
+        update question
+        <set>
+            <if test="hits!= null" >
+                hits = #{hits},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

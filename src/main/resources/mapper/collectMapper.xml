@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjfu.igarden.dao.CollectMapper">
+    <select id="getCollectListByType" resultType="cn.edu.bjfu.igarden.entity.Collect">
+        SELECT * FROM collect
+        <where>
+            <if test="collecttype!=null">
+                collecttype = #{collecttype}
+            </if>
+            AND
+            <if test="userid!=null">
+                userid=#{userid}
+            </if>
+        </where>
+        ORDER BY collecttime DESC
+    </select>
+    <insert id="addCollect" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO collect(collecttype,userid,plantid,plant_title,insectid,insect_title,chinayuanlinid,chinayuanlin_title,questionplantid,questionplant_title,questiondiseaseid,questiondisease_title)
+        VALUES (#{collecttype},#{userid},#{plantid},#{plant_title},#{insectid},#{insect_title},#{chinayuanlinid},#{chinayuanlin_title},#{questionplantid},#{questionplant_title},#{questiondiseaseid},#{questiondisease_title})
+    </insert>
+    <delete id="deleteCollect">
+        DELETE FROM collect
+        <where>
+            <if test="userid!=null">
+                userid = #{userid}
+            </if>
+            AND
+            <if test="plantid != null">
+                plantid = #{plantid}
+             </if>
+            AND
+            <if test="insectid != null">
+                insectid=#{insectid}
+            </if>
+            AND
+            <if test="chinayuanlinid != null">
+                chinayuanlinid =#{chinayuanlinid}
+            </if>
+            AND
+            <if test="questionplantid != null">
+               questionplantid = #{questionplantid}
+            </if>
+            AND
+            <if test="questiondiseaseid != null">
+                questiondiseaseid = #{questiondiseaseid}
+            </if>
+        </where>
+    </delete>
+    <select id="findCollectByUseridAndX" resultType="cn.edu.bjfu.igarden.entity.Collect">
+        SELECT * FROM collect
+        <where>
+            <if test="userid!=null">
+                userid = #{userid}
+            </if>
+            AND
+            <if test="plantid != null">
+                plantid = #{plantid}
+            </if>
+            AND
+            <if test="insectid != null">
+                insectid=#{insectid}
+            </if>
+            AND
+            <if test="chinayuanlinid != null">
+                chinayuanlinid =#{chinayuanlinid}
+            </if>
+            AND
+            <if test="questionplantid != null">
+                questionplantid = #{questionplantid}
+            </if>
+            AND
+            <if test="questiondiseaseid != null">
+                questiondiseaseid = #{questiondiseaseid}
+            </if>
+        </where>
+    </select>
+
+    <select id="findAllchinayuanlindetail" resultType="cn.edu.bjfu.igarden.entity.ChinayuanlinDetail">
+        SELECT * FROM chinayuanlindetail
+    </select>
+    <select id="findTop" resultType="cn.edu.bjfu.igarden.entity.ChinayuanlinDetail">
+        SELECT * FROM chinayuanlindetail
+        ORDER BY readtimes DESC
+    </select>
+
+</mapper>

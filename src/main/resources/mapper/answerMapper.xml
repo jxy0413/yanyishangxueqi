@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjfu.igarden.dao.AnswerMapper">
+<select id="findAnswerByQuestionId" resultType="cn.edu.bjfu.igarden.entity.Answer">
+    SELECT * FROM answer
+    <where>
+        <!-- 重复说一下，id 不能是 int，int 默认是 0，不可能是 null, 而 Integer 可以是 null-->
+        <if test="questionid!=null">
+            questionid=#{questionid}
+        </if>
+    </where>
+    ORDER BY up DESC,create_time DESC
+</select>
+<select id="findQuestionListofAnswerByUserIdAndQtype" resultType="cn.edu.bjfu.igarden.entity.Answer">
+    SELECT * FROM answer
+    <where>
+        <if test="answerid!=null">
+            answerid=#{answerid}
+        </if>
+        AND
+        <if test="qtype!=null">
+            qtype=#{qtype}
+        </if>
+    </where>
+    ORDER BY create_time DESC
+</select>
+<select id="findAnswerByAnswerId"  resultType="cn.edu.bjfu.igarden.entity.Answer">
+    SELECT * FROM answer
+    <where>
+        <if test="answerid!=null">
+            answerid=#{answerid}
+        </if>
+    </where>
+    ORDER BY up DESC,create_time DESC
+</select>
+    <select id="selectByExampleList"  resultType="cn.edu.bjfu.igarden.entity.Parkinfo" >
+        select
+        *
+        from parkinfo
+    </select>
+    <select id="selectByExampleWithBLOBs"  resultType="cn.edu.bjfu.igarden.entity.ParkinfoWithBLOBs" >
+        select
+        *
+        from parkinfo
+    </select>
+
+    <select id="queryChinayuanidByplantlinId"  resultType="cn.edu.bjfu.igarden.entity.ChinayuanlinDetail">
+        SELECT * FROM chinayuanlindetail
+        <where>
+                id=#{chinayuanlin_id}
+        </where>
+
+    </select>
+
+<select id="queryPlantByName" parameterType="java.lang.String" resultType="cn.edu.bjfu.igarden.entity.PlantDetail">
+    SELECT * FROM plant
+    <where>
+        <if test="_parameter!=null">
+            plant_name=#{plant_name}
+        </if>
+    </where>
+</select>
+
+    <select id="queryBingChongByName" parameterType="java.lang.String" resultType="cn.edu.bjfu.igarden.entity.DiseaseTable">
+        SELECT * FROM disease
+        <where>
+            <if test="_parameter!=null">
+                disease_name=#{disease_name}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAll" resultType="cn.edu.bjfu.igarden.entity.diseasePlant">
+        SELECT * FROM diseasePlant
+    </select>
+
+    <select id="queryChinayuanidByplantname" resultType="cn.edu.bjfu.igarden.entity.sql_sort">
+        SELECT * FROM sql_sort
+        <where>
+            <if test="_parameter!=null">
+                plant_name=#{plant_name}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryplantbiemingByplantname" resultType="cn.edu.bjfu.igarden.entity.plantbieming">
+        SELECT * FROM plantbieming
+        <where>
+            <if test="_parameter!=null">
+                plant_bieming like "%"#{plant_bieming}"%"
+            </if>
+        </where>
+        ORDER BY length(plant_bieming) ASC
+    </select>
+
+    <select id="queryplantnameByplantbieming" resultType="java.lang.String">
+        SELECT plant_name FROM plantbieming
+        <where>
+            <if test="_parameter!=null">
+                plant_bieming=#{plant_bieming}
+            </if>
+        </where>
+    </select>
+
+<select id="findAnswerById" resultType="cn.edu.bjfu.igarden.entity.Answer">
+    SELECT * FROM answer
+    <where>
+        <if test="id!=null">
+            id=#{id}
+        </if>
+    </where>
+    ORDER BY create_time DESC
+</select>
+<select id="findAnswerByUserIdAndQuestionId" resultType="cn.edu.bjfu.igarden.entity.Answer">
+    SELECT * FROM answer
+    <where>
+        <if test="answerid!=null">
+            answerid=#{answerid}
+        </if>
+        AND
+        <if test="qid!=null">
+            questionid=#{questionid}
+        </if>
+    </where>
+    ORDER BY create_time DESC
+</select>
+<select id="findAnswerByUserId" resultType="cn.edu.bjfu.igarden.entity.Answer">
+    SELECT * FROM answer
+    <where>
+        <if test="answerid!=null">
+            answerid=#{answerid}
+        </if>
+    </where>
+    ORDER BY create_time DESC
+</select>
+    <select id="searchInference" resultType="cn.edu.bjfu.igarden.entity.disease_inference">
+        SELECT * FROM disease_inference
+        <where>
+            <if test="_parameter!=null">
+                result=#{result}
+            </if>
+        </where>
+    </select>
+    <select id="searchAllrule" resultType="cn.edu.bjfu.igarden.entity.disease_rule">
+        SELECT * FROM disease_rule
+        <where>
+            <if test="_parameter!=null">
+                id=#{id}
+            </if>
+        </where>
+    </select>
+<select id="rearchDeatilByid" resultType="cn.edu.bjfu.igarden.entity.PlantDetail">
+    SELECT * FROM plant
+    <where>
+
+        id=#{id}
+
+    </where>
+    ORDER BY create_time DESC
+</select>
+    <select id="queryCountNameciShu" resultType="cn.edu.bjfu.igarden.entity.PlantDetail">
+        SELECT * FROM plant
+        <where>
+            shibieCount != null or shibieCount!=0
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+
+<insert id="addAnswerByUserId"  useGeneratedKeys="true" keyProperty="id" >
+    insert into answer(questionid,qtype,answerid,content,up,dislike,adoptstatus,questionerid,image,answer_username,answer_name,answer_avatar,question_title) values (#{questionid},#{qtype},#{answerid},#{content},#{up},#{dislike},#{adoptstatus},#{questionerid},#{image},#{answer_username},#{answer_name},#{answer_avatar},#{question_title})
+</insert>
+<update id="changeAnswerAdopt"   parameterType="cn.edu.bjfu.igarden.entity.Answer" >
+    update answer
+    <set>
+        adoptstatus = #{adoptstatus}
+    </set>
+    where id=#{id}
+</update>
+<update id="updateAnswerLikeTimes" parameterType="cn.edu.bjfu.igarden.entity.Answer">
+    UPDATE answer
+    <set>
+        up=#{up}
+    </set>
+    WHERE id=#{id}
+</update>
+
+<update id="updateShiBieCount" parameterType="cn.edu.bjfu.igarden.entity.PlantDetail">
+    UPDATE plant
+    <set>
+          shibieCount = #{shibieCount}+1
+    </set>
+    WHERE
+      plant_name=#{plant_name}
+
+</update>
+
+    <update id="queryCountPlantName" parameterType="cn.edu.bjfu.igarden.entity.PlantDetail">
+        UPDATE plant
+        <set>
+            shibieCount = #{shibieCount}+1
+        </set>
+        WHERE
+        plant_name=#{plant_name}
+
+    </update>
+
+    <update id="updateAlert" parameterType="cn.edu.bjfu.igarden.entity.Alert">
+        UPDATE alert
+        <set>
+            type =1
+        </set>
+        WHERE
+        id=#{id}
+
+    </update>
+
+    <update id="updateAlertRevoke" parameterType="cn.edu.bjfu.igarden.entity.Alert">
+        UPDATE alert
+        <set>
+            type =0
+        </set>
+        WHERE
+        id=#{id}
+
+    </update>
+
+    <update id="updateShiBieCountBingChong" parameterType="cn.edu.bjfu.igarden.entity.DiseaseTable">
+        UPDATE disease
+        <set>
+
+            shibieCount = #{shibieCount}+1
+
+        </set>
+        WHERE
+        disease_name=#{disease_name}
+    </update>
+    <select id="findParkListByName" resultType="cn.edu.bjfu.igarden.entity.ParkinfoWithBLOBs">
+        SELECT *  FROM parkinfo
+        <where>
+            <if test="name!=null and name!=''">
+                name like "%"#{name}"%"
+            </if>
+
+
+        <if test="type!=null and type!=''">
+            AND type=#{type}
+        </if>
+
+        <if test="zone!=null and zone!=''">
+            AND zone=#{zone}
+        </if>
+        </where>
+    </select>
+    <select id="selectByFlowerExample"  resultType="cn.edu.bjfu.igarden.entity.Flowerinfo" >
+        select *
+        from flowerinfo
+    </select>
+    <select id="findFlowerListByName" resultType="cn.edu.bjfu.igarden.entity.Flowerinfo">
+        SELECT *  FROM flowerinfo
+        <where>
+            <if test="name!=null and name!=''">
+                name like "%"#{name}"%"
+            </if>
+
+            <if test="bloomingtime!=null and bloomingtime!=''">
+                AND bloomingtime like "%"#{bloomingtime}"%"
+            </if>
+        </where>
+    </select>
+    <select id="queryDidianByName" resultType="java.lang.Integer">
+    SELECT count(*)  FROM addDiseaseCount
+    <where>
+        address  like concat('%',#{name},'%')
+    </where>
+   </select>
+    <select id="queryQianSi" resultType="cn.edu.bjfu.igarden.entity.addDiseaseCount">
+        SELECT *  FROM addDiseaseCount
+        ORDER by diseaseTime desc
+        limit 4
+    </select>
+    <select id="queryQianSiByPlant" resultType="cn.edu.bjfu.igarden.entity.addPlantCount">
+        SELECT *  FROM addPlantCount
+        ORDER by diseaseTime desc
+        limit 4
+    </select>
+    <select id="queryExpertRound" resultType="cn.edu.bjfu.igarden.entity.Experts">
+       SELECT *
+      FROM experts AS t1 JOIN (SELECT ROUND(RAND() * (SELECT MAX(id) FROM experts)) AS id) AS t2
+      WHERE t1.id >= t2.id
+      ORDER BY t1.id ASC LIMIT 4;
+    </select>
+    <select id="queryDidianByNamePlant" resultType="java.lang.Integer">
+        SELECT count(*)  FROM addPlantCount
+        <where>
+            address  like concat('%',#{name},'%')
+        </where>
+    </select>
+
+    <select id="queryDiseaseCountByTimeOneDay" resultType="cn.edu.bjfu.igarden.entity.addDiseaseCount">
+        select * from addDiseaseCount where diseaseTime between date_add(now(), interval - 60*60*24 SECOND)
+        and now();
+    </select>
+    <select id="queryPlantCountByTimeOneDay" resultType="cn.edu.bjfu.igarden.entity.addPlantCount">
+        select * from addPlantCount where diseaseTime between date_add(now(), interval - 60*60*24 SECOND)
+        and now();
+    </select>
+
+    <select id="countLiShiShiBieByZhiWu" resultType="java.lang.Integer">
+        SELECT count(*)  FROM addPlantCount
+    </select>
+    <select id="countLiShiShiBieByBingChong" resultType="java.lang.Integer">
+        SELECT count(*)  FROM addDiseaseCount
+    </select>
+    <select id="countLiShiShiBieByZhiWuToday" resultType="java.lang.Integer">
+        SELECT count(*)  FROM addPlantCount
+        <where>
+            diseaseTime  like concat('%',#{today},'%')
+        </where>
+    </select>
+    <select id="countLiShiShiBieByBingChongToday" resultType="java.lang.Integer">
+        SELECT count(*)  FROM addDiseaseCount
+        <where>
+            diseaseTime  like concat('%',#{today},'%')
+        </where>
+    </select>
+    <select id="countUser" resultType="java.lang.Integer">
+    SELECT count(*)  FROM user
+</select>
+    <select id="queryLiShiShiBieByZhiWuByType1" resultType="java.lang.Double">
+        SELECT count(*)  FROM addPlantCount
+        WHERE type=1
+    </select>
+    <select id="queryLiShiShiBieByZhiWuByType2" resultType="java.lang.Double">
+        SELECT count(*)  FROM addPlantCount
+        <where>
+            type=2
+        </where>
+    </select>
+    <select id="queryDiseaseCountByTime" resultType="cn.edu.bjfu.igarden.entity.addDiseaseCount">
+       select * from addDiseaseCount where diseaseTime between date_add(now(), interval - 10 SECOND)
+       and now();
+    </select>
+    <select id="queryPlantCountByTime" resultType="cn.edu.bjfu.igarden.entity.addPlantCount">
+        select * from addPlantCount where diseaseTime between date_add(now(), interval - 10 SECOND)
+        and now();
+    </select>
+    <select id="getPlantBybianhao" resultType="cn.edu.bjfu.igarden.entity.PlantDetail">
+        SELECT *  FROM plant
+        <where>
+            <if test="devision!=null and devision!=''">
+                devision =#{devision}
+            </if>
+        </where>
+    </select>
+    <select id="getHistoryByUsername" resultType="cn.edu.bjfu.igarden.entity.historyPlant">
+        SELECT * FROM historyplant
+
+
+
+
+
+    </select>
+    <select id="getUser" resultType="cn.edu.bjfu.igarden.entity.historyPlant">
+         SELECT distinct username FROM historyplant
+    </select>
+    <select id="getPlantByZhiwuming" resultType="cn.edu.bjfu.igarden.entity.PlantDetail">
+        SELECT *  FROM plant
+        <where>
+            <if test="plant_name!=null and plant_name!=''">
+                plant_name =#{plant_name}
+            </if>
+        </where>
+    </select>
+    <select id="getAllUsers" resultType="cn.edu.bjfu.igarden.entity.User">
+        SELECT *  FROM user
+    </select>
+    <select id="getAllUsers1" resultType="cn.edu.bjfu.igarden.entity.Users">
+        SELECT *  FROM users
+    </select>
+    <select id="getAllPapers" resultType="cn.edu.bjfu.igarden.entity.PlantTuijian">
+        SELECT *  FROM planttuijian
+    </select>
+    <select id="getAllPapers1" resultType="cn.edu.bjfu.igarden.entity.Paper">
+        SELECT *  FROM papers
+    </select>
+    <select id="findLikesByUser" resultType="cn.edu.bjfu.igarden.entity.Like">
+        SELECT *  FROM likes
+        <where>
+            <if test="uid!=null and uid!=''">
+                uid =#{uid}
+            </if>
+        </where>
+    </select>
+    <select id="findLikesByUser1" resultType="cn.edu.bjfu.igarden.entity.Like1">
+        SELECT *  FROM likes1
+        <where>
+            <if test="uid!=null and uid!=''">
+                uid =#{uid}
+            </if>
+        </where>
+    </select>
+    <select id="findPaperById" resultType="cn.edu.bjfu.igarden.entity.PlantTuijian">
+        SELECT *  FROM planttuijian
+        <where>
+            <if test="id!=null and id!=''">
+                id =#{id}
+            </if>
+        </where>
+    </select>
+    <select id="findPaperById1" resultType="cn.edu.bjfu.igarden.entity.Paper">
+        SELECT *  FROM papers
+        <where>
+            <if test="pid!=null and pid!=''">
+                pid =#{pid}
+            </if>
+        </where>
+    </select>
+    <select id="findTopNPapers" resultType="cn.edu.bjfu.igarden.entity.PlantTuijian">
+        SELECT  *  FROM planttuijian order by hits desc
+
+    </select>
+    <select id="getColumn2" resultType="java.lang.String">
+        SELECT plant_name FROM planttuijian
+
+    </select>
+    <select id="getColumn3" resultType="java.lang.String">
+        SELECT plant_description FROM planttuijian
+
+    </select>
+    <select id="idlist" resultType="java.lang.Integer">
+        SELECT id FROM planttuijian
+
+    </select>
+    <select id="queryLike" resultType="java.lang.Integer">
+        SELECT *  FROM liketable
+        <where>
+            <if test="user_id!=null and user_id!=''">
+                user_id =#{user_id}
+            </if>
+        </where>
+    </select>
+    <select id="getColumnWithId" resultType="java.lang.String">
+        SELECT plant_name  FROM planttuijian
+        <where>
+            <if test="id!=null and id!=''">
+                id =#{id}
+            </if>
+        </where>
+    </select>
+    <select id="getColumnWithId2" resultType="java.lang.String">
+        SELECT plant_description  FROM planttuijian
+        <where>
+            <if test="id!=null and id!=''">
+                id =#{id}
+            </if>
+        </where>
+    </select>
+    <select id="getUserWithId" resultType="java.lang.String">
+        SELECT plant_bxtz  FROM planttuijian
+        <where>
+            <if test="id!=null and id!=''">
+                id =#{id}
+            </if>
+        </where>
+    </select>
+    <select id="getCaipuWithId" resultType="java.lang.String">
+        SELECT plant_bxtz  FROM planttuijian
+        <where>
+            <if test="id!=null and id!=''">
+                id =#{id}
+            </if>
+        </where>
+    </select>
+    <select id="getRecipeById" parameterType="java.lang.Integer" resultType="cn.edu.bjfu.igarden.entity.PlantTuijian">
+        SELECT *  FROM planttuijian
+        where
+
+                id =#{id}
+
+    </select>
+</mapper>

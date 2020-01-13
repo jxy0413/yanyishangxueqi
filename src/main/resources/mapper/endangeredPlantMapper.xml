@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjfu.igarden.dao.EndangeredPlantMapper">
+    <select id="findListByType" resultType="cn.edu.bjfu.igarden.entity.EndangeredPlantsTable">
+        SELECT type,count(*) AS count  FROM endangered_plant  GROUP BY type
+    </select>
+    <select id="findEndangeredPlantsListByType" resultType="cn.edu.bjfu.igarden.entity.EndangeredPlantsTable">
+        SELECT *  FROM endangered_plant
+        <where>
+        <if test="type!=null">
+            type=#{type}
+        </if>
+    </where>
+    </select>
+    <select id="findEndangeredPlantsById" resultType="cn.edu.bjfu.igarden.entity.EndangeredPlantsTable">
+        SELECT *  FROM endangered_plant
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+        </where>
+    </select>
+    <insert id="insertPlantsFamily"  useGeneratedKeys="true" keyProperty="id" >
+        insert into plantfamilytype (family,genus) values (#{family},#{genus})
+    </insert>
+    <select id="findAllGenus" resultType="cn.edu.bjfu.igarden.entity.PlantNumberTable">
+        select plant_family,plant_genus from plant group by plant_genus;
+    </select>
+    <select id="findPlantType" resultType="cn.edu.bjfu.igarden.entity.PlantFamilyTypeTable">
+        SELECT * FROM plantfamilytype
+        <where>
+            <if test="genus!=null">
+                genus=#{genus}
+            </if>
+        </where>
+    </select>
+    <select id="findByPlantNumber" resultType="cn.edu.bjfu.igarden.entity.PlantNumberTable">
+        SELECT id FROM plant
+        <where>
+            <if test="plant_number!=null">
+                plant_number=#{plant_number}
+            </if>
+        </where>
+    </select>
+    <update id="updatePlantNumber" parameterType="cn.edu.bjfu.igarden.entity.PlantTable" >
+        update plant
+        <set>
+            <if test="id != null" >
+                plant_number = #{plant_number}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <update id="updatePlantId" parameterType="cn.edu.bjfu.igarden.entity.PlantTable" >
+        update plant
+        <set>
+            <if test="id != null" >
+                plantid = #{plantid}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,55 @@
+web:
+  uploadPath: /root/apache-tomcat-8.5.38/webapps/images/avatar
+  upload-path: /root/apache-tomcat-8.5.38/webapps/images/avatar
+  questionImagePath: /root/apache-tomcat-8.5.38/webapps/images/avatar/question
+  answerImagePath: /root/apache-tomcat-8.5.38/webapps/images/avatar/answer/
+  shibieImagePath: /root/apache-tomcat-8.5.38/webapps/images/avatar/shibie/
+  alertImagePath: /root/apache-tomcat-8.5.38/webapps/images/avatar/alert/
+#    uploadPath: E:\api\testImage
+#    upload-path: E:\api\testImage
+#    questionImagePath: E:\api\testImage
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://39.105.50.119:3306/smart_garden?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
+
+  jpa:
+    database: MySQL
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
+
+endpoints:
+  actuator:
+    enabled: true
+    sensitive: false
+logging:
+  path: /Users/chenjie/IdeaProjects/igarden/log
+  file: base.log
+mybatis:
+  typeAliasesPackage: cn.edu.bjfu.igarden.dao.entity
+  mapperLocations: classpath:mapper/*.xml
+server:
+  undertow:
+    worker-threads: 400
+    io-threads: 100
+    buffer-size: 102400
+    direct-buffers: true
+weixinconfig:
+  weixinappID: wxbcf87ba1e79378d5
+  weixinappSecret: 48bf689ba9b48d94837f688779059395
+  weixinappID1: wxc36348eb1a6bca49
+  weixinappSecret1: 8129f062f625836f4b7f8b4140502e18

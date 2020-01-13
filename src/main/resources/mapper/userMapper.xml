@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjfu.igarden.dao.UserMapper">
+
+    <!--<select id="queryInfoByUsername" parameterType="java.lang.String" resultType="java.util.Map">-->
+    <!--SELECT id, username, password FROM USER WHERE username = #{username}-->
+    <!--</select>-->
+    <insert id="addUser"  useGeneratedKeys="true" keyProperty="id" >
+        insert into user(role,username,password,mobile,email,name,nickname,avatar,sex,area,description,expertstag,expertstitle,expertsintro) values (#{role},#{username},#{password},#{mobile},#{email},#{name},#{nickname},#{avatar},#{sex},#{area},#{description},#{expertstag},#{expertstitle},#{expertsintro})
+    </insert>
+
+    <insert id="addDiseaseCount"    >
+        insert into addDiseaseCount(type,diseaseName,diseaseTime,address,location) values (#{type},#{diseaseName},#{diseaseTime},#{address},#{location})
+    </insert>
+
+    <insert id="addPlantCount"    >
+        insert into addPlantCount(type,plantName,diseaseTime,address,location) values (#{type},#{plantName},#{diseaseTime},#{address},#{location})
+    </insert>
+
+    <insert id="addExperts"  useGeneratedKeys="true" keyProperty="id" >
+        insert into user(role,username,password,mobile,email,name,nickname,avatar,sex,area,description,expertstag,expertstitle,expertsintro,research,expertslevel,expertstype,expertsachievement,classification) values (#{role},#{username},#{password},#{mobile},#{email},#{name},#{nickname},#{avatar},#{sex},#{area},#{description},#{expertstag},#{expertstitle},#{expertsintro},#{research},#{expertslevel},#{expertstype},#{expertsachievement},#{classification})
+    </insert>
+
+    <insert id="insertExpert" useGeneratedKeys="true" keyProperty="id">
+        insert into experts(expertsid,name,sex,type,research,classification,achievement,mobile,address,email,img) values (#{expertsid},#{name},#{sex},#{type},#{research},#{classification},#{achievement},#{mobile},#{address},#{email},#{img})
+    </insert>
+
+
+    <insert id="addToken"  useGeneratedKeys="true" keyProperty="id" >
+        insert into login(userid,token) values (#{userid},#{token})
+    </insert>
+    <update id="updateToken" parameterType="cn.edu.bjfu.igarden.entity.Login" >
+        update login
+        <set>
+            <if test="userid != null" >
+                token = #{token},
+            </if>
+        </set>
+        where userid=#{userid}
+    </update>
+    <update id="update" parameterType="cn.edu.bjfu.igarden.entity.User" >
+        update user
+        <set>
+            <if test="role !=null">
+                role = #{role},
+            </if>
+            <if test="name != null" >
+                name = #{name},
+            </if>
+            <if test="nickname != null" >
+                nickname = #{nickname},
+            </if>
+            <if test="password != null" >
+                password = #{password},
+            </if>
+            <if test="email != null" >
+                email = #{email},
+            </if>
+            <if test="sex!= null" >
+                sex = #{sex},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile},
+            </if>
+            <if test="area != null" >
+                area = #{area},
+            </if>
+            <if test="avatar != null" >
+                avatar = #{avatar},
+            </if>
+            <if test="news != null" >
+                news = #{news},
+            </if>
+            <if test="description != null" >
+                description = #{description},
+            </if>
+            <if test="expertstag != null" >
+                expertstag = #{expertstag},
+            </if>
+            <if test="expertstitle!=null">
+                expertstitle = #{expertstitle},
+            </if>
+            <if test="expertsintro!=null">
+                expertsintro = #{expertsintro},
+            </if>
+
+            <if test="name !=null">
+            name = #{name},
+            </if>
+
+            <if test="area !=null">
+                area = #{area},
+            </if>
+
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateExperts" parameterType="cn.edu.bjfu.igarden.entity.Experts" >
+        update experts
+        <set>
+            <if test="name != null" >
+                name = #{name},
+            </if>
+            <if test="email != null" >
+                email = #{email},
+            </if>
+            <if test="sex!= null" >
+                sex = #{sex},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile},
+            </if>
+            <if test="address != null" >
+                address = #{address},
+            </if>
+            <if test="img!= null" >
+                img = #{img},
+            </if>
+        </set>
+        where expertsid=#{expertsid}
+    </update>
+
+    <select id="findOne" resultType="cn.edu.bjfu.igarden.entity.User">
+        select * from user
+        <where>
+            <!-- 重复说一下，id 不能是 int，int 默认是 0，不可能是 null, 而 Integer 可以是 null-->
+            <if test="id!=null">
+                id=#{id}
+            </if>
+            <if test="username!=null">
+                and username=#{username}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByUserPhoneNum" resultType="cn.edu.bjfu.igarden.entity.User"  parameterType="String">
+        select * from user
+        <where>
+            <if test="_parameter!=null">
+                and mobile=#{mobile}
+            </if>
+        </where>
+    </select>
+
+    <select id="findExpert" resultType="cn.edu.bjfu.igarden.entity.User">
+        select * from user
+        <where>
+             role=100
+        </where>
+    </select>
+    <select id="findUseridByToken" resultType="cn.edu.bjfu.igarden.entity.Login">
+        select * from login
+        <where>
+            <!-- 重复说一下，id 不能是 int，int 默认是 0，不可能是 null, 而 Integer 可以是 null-->
+            <if test="token!=null">
+                and token=#{token}
+            </if>
+        </where>
+    </select>
+    <select id="findIdByToken" resultType="cn.edu.bjfu.igarden.entity.Login">
+        select id from login
+        <where>
+            <!-- 重复说一下，id 不能是 int，int 默认是 0，不可能是 null, 而 Integer 可以是 null-->
+            <if test="token!=null">
+                and token=#{token}
+            </if>
+        </where>
+    </select>
+    <select id="findByUserId" resultType="cn.edu.bjfu.igarden.entity.Login">
+        select * from login
+        <where>
+            <!-- 重复说一下，id 不能是 int，int 默认是 0，不可能是 null, 而 Integer 可以是 null-->
+            <if test="userid!=null">
+                userid=#{userid}
+            </if>
+        </where>
+    </select>
+    <select id="checkUnReadQuestionList" resultType="cn.edu.bjfu.igarden.entity.Invite">
+        select * from invite
+        <where>
+            <!-- 重复说一下，id 不能是 int，int 默认是 0，不可能是 null, 而 Integer 可以是 null-->
+            <if test="expertId!=null">
+                expertId=#{expertId}
+            </if>
+        </where>
+    </select>
+
+    <select id="checkUnReadQuestion" resultType="cn.edu.bjfu.igarden.entity.Invite">
+        select * from invite
+        <where>
+            questionId=#{questionId}
+            AND
+            expertId=#{expertId}
+        </where>
+
+    </select>
+
+    <update id="changeUnReadQuestion" parameterType="cn.edu.bjfu.igarden.entity.Invite" >
+        update invite
+        <set>
+            isread = #{isread}
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="changePassword" parameterType="cn.edu.bjfu.igarden.entity.User" >
+        update user
+        <set>
+            password = #{password}
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateDiseaseCount" parameterType="cn.edu.bjfu.igarden.entity.addDiseaseCount" >
+        update addDiseaseCount
+        <set>
+            paizhaoCount = #{paizhaoCount}+1
+        </set>
+        where
+            diseaseName=#{diseaseName}
+    </update>
+
+
+    <update id="isRead" parameterType="cn.edu.bjfu.igarden.entity.User" >
+        update invite
+        <set>
+            isread = 1
+        </set>
+        <where>
+        questionId=#{questionId}
+        AND
+        expertId=#{expertId}
+       </where>
+    </update>
+
+    <select id="remindTheNews" resultType="cn.edu.bjfu.igarden.entity.Invite">
+        select * from invite
+        <where>
+         expertId=#{expertId}
+        </where>
+        AND
+        <where>
+         isread=#{isread}
+        </where>
+    </select>
+
+
+    <select id="queryExpertId" resultType="cn.edu.bjfu.igarden.entity.Invite">
+        select * from invite
+        <where>
+            expertId=#{expertId}
+        </where>
+    </select>
+
+    <select id="queryDiseaseCount" resultType="cn.edu.bjfu.igarden.entity.addDiseaseCount">
+        select * from addDiseaseCount
+        <where>
+            diseaseName=#{diseaseName}
+        </where>
+    </select>
+
+    <select id="getAllUser" resultType="cn.edu.bjfu.igarden.entity.User">
+        select * from user
+    </select>
+
+
+
+    <!--<insert id="insertData"  parameterType="java.util.Map">-->
+    <!--INSERT INTO USER ( id, username,password )-->
+    <!--VALUES ( #{id}, #{username, jdbcType=VARCHAR},#{password, jdbcType=VARCHAR});-->
+    <!--</insert>-->
+
+
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjfu.igarden.dao.ExpertsMapper">
+    <select id="getAllExperts" resultType="cn.edu.bjfu.igarden.entity.Experts">
+        SELECT * FROM experts
+    </select>
+    <select id="getExpertsListByType" resultType="cn.edu.bjfu.igarden.entity.Experts">
+        SELECT * FROM experts
+        <where>
+            <if test="type!=null">
+                type = #{type}
+            </if>
+        </where>
+    </select>
+    <select id="getExpertById" resultType="cn.edu.bjfu.igarden.entity.Experts">
+        SELECT * FROM experts
+        <where>
+            <if test="expertsid!=null">
+                expertsid=#{expertsid}
+            </if>
+        </where>
+    </select>
+    <select id="getExpertByName" resultType="cn.edu.bjfu.igarden.entity.Experts">
+        SELECT * FROM experts
+        <where>
+            <if test="name!=null">
+                name LIKE "%"#{name}"%"
+            </if>
+        </where>
+    </select>
+
+    <insert id="addChat"  useGeneratedKeys="true" keyProperty="id">
+        insert into chat(userid,touserid,message,readtime) values (#{userid},#{touserid},#{message},#{readtime})
+    </insert>
+
+    <select id="getChatUserList" resultType="java.lang.Integer">
+        SELECT userid  FROM chat
+        where touserid=#{touserid}
+        group by userid
+		union
+        SELECT touserid  FROM chat
+        where userid=#{touserid}
+        group by touserid
+    </select>
+
+    <select id="getChatToOther" resultType="java.lang.Integer">
+        SELECT touserid  FROM chat
+        where userid=#{userid}
+        group by touserid
+    </select>
+    <select id="getChatListByUser" resultType="cn.edu.bjfu.igarden.entity.chat">
+        SELECT * FROM chat
+        where touserid=#{touserid} and userid=#{userid}
+        union
+        SELECT * FROM chat
+        where touserid=#{userid} and userid=#{touserid}
+        order by time desc
+    </select>
+
+    <select id="getChatListToOther" resultType="cn.edu.bjfu.igarden.entity.chat">
+        SELECT * FROM chat
+        where touserid=#{touserid} and userid=#{userid}
+        order by time desc
+    </select>
+
+
+    <update id="updateChatByreadtime" parameterType="cn.edu.bjfu.igarden.entity.chat" >
+        update chat
+        <set>
+            <if test="readtime != null" >
+                readtime = #{readtime},
+            </if>
+        </set>
+        where userid=#{userid} and touserid=#{touserid}
+    </update>
+
+
+    <insert id="insertInviteRecord"  useGeneratedKeys="true" keyProperty="id" >
+        insert into invite(questionId,userId,expertId) values (#{questionId},#{userId},#{expertId})
+    </insert>
+    </mapper>
